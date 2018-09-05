@@ -148,13 +148,18 @@ in
         wantedBy = optional cfg.enableOnBoot "multi-user.target";
         environment = proxy_env;
         serviceConfig = {
+	# TODO: only touch the runtime if containerd is enable
+	# I'm not sure what happens if dockerd is running and containerd alrady is...?
           ExecStart = [
             ""
             ''
               ${cfg.package}/bin/dockerd \
                 --group=docker \
+		--containerd=/run/containerd/containerd.sock \
                 --host=fd:// \
                 --log-driver=${cfg.logDriver} \
+		--add-runtime sysrunc=${pkgs.runc}/bin/runc \
+		--default-runtime sysrunc \
                 ${optionalString (cfg.storageDriver != null) "--storage-driver=${cfg.storageDriver}"} \
                 ${optionalString cfg.liveRestore "--live-restore" } \
                 ${cfg.extraOptions}

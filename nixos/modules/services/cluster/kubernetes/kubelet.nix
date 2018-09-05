@@ -6,6 +6,16 @@ let
   top = config.services.kubernetes;
   cfg = top.kubelet;
 
+  # TODO: for now image service == runtime service
+  # TODO: backward compat, support builtin dockershim as it exists pre-cri
+  containerRuntimeEndpoint =
+    if cfg.containerRuntime == "containerd" then
+      "/run/containerd/containerd.sock"
+    else if cfg.containerRuntime == "crio" then
+      "/run/crio/crio.sock"
+    else
+      null;
+
   cniConfig =
     if cfg.cni.config != [] && !(isNull cfg.cni.configDir) then
       throw "Verbatim CNI-config and CNI configDir cannot both be set."
@@ -99,6 +109,12 @@ in
       type = nullOr path;
     };
 
+    containerRuntime = mkOption {
+      description = "Container Runtime (CRI) to use.";
+      default = "containerd";
+      type = enum [ "containerd" "crio" "docker" ];
+    };
+
     cni = {
       packages = mkOption {
         description = "List of network plugin packages to install.";
@@ -138,6 +154,8 @@ in
         default = null;
       };
     };
+
+    absoluteCniConfigDir = mkOption { description = "final path of cni config dir"; type = nullOr path; default = null; };
 
     enable = mkEnableOption "Kubernetes kubelet.";
 
@@ -251,6 +269,9 @@ in
     (mkIf cfg.enable {
       services.kubernetes.kubelet.seedDockerImages = [infraContainer];
 
+      services.kubernetes.kubelet.absoluteCniConfigDir = "${cniConfig}";
+
+      # TODO: fix so it pre-seeds with ctr/crictl
       systemd.services.kubelet-bootstrap = {
         description = "Boostrap Kubelet";
         wantedBy = ["kubernetes.target"];
@@ -259,7 +280,8 @@ in
         script = ''
           ${concatMapStrings (img: ''
             echo "Seeding docker image: ${img}"
-            docker load <${img}
+	    # TODO
+            echo docker load <${img}
           '') cfg.seedDockerImages}
 
           rm /opt/cni/bin/* || true
@@ -297,6 +319,12 @@ in
             ${optionalString (cfg.clusterDomain != "")
               "--cluster-domain=${cfg.clusterDomain}"} \
             --cni-conf-dir=${cniConfig} \
+	    ${optionalString (cfg.containerRuntime != "docker")
+	      "--container-runtime=remote"} \
+	    ${optionalString (cfg.containerRuntime == "docker")
+	      "--container-runtime=docker"} \
+	    ${optionalString (cfg.containerRuntime != "docker")
+	      "--container-runtime-endpoint=${containerRuntimeEndpoint}"} \
             ${optionalString (cfg.featureGates != [])
               "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"} \
             --hairpin-mode=hairpin-veth \

@@ -1,19 +1,23 @@
 { buildGoPackage, fetchurl, lib }:
 
+let
+version = "98eea54";
+in
 buildGoPackage
-  { name = "cri-tools-1.0.0-alpha.0";
+  {
+    name = "cri-tools-${version}";
     src = fetchurl
-      { url = "https://github.com/kubernetes-incubator/cri-tools/archive/v1.0.0-alpha.0.tar.gz";
-        sha256 = "1la26f38xafb7g9hrppjq7gmajiyr8idcwbian7n412q9m0lb3ic";
+      { url = "https://github.com/kubernetes-sigs/cri-tools/archive/98eea54af789ae13edce79cba101fb9ac8e7b241.tar.gz";
+        sha256 = "13dcrwnqqspvh62qbxd2s5m1sf7am58820ahji7sz2bsm72jzwzp";
       };
 
-    goPackagePath = "github.com/kubernetes-incubator/cri-tools";
+    goPackagePath = "github.com/kubernetes-sigs/cri-tools";
     subPackages = [ "cmd/crictl" "cmd/critest" ];
 
     meta = {
       license = lib.licenses.asl20;
     };
 
-    goDeps = ./deps.nix;
+#    goDeps = ./deps.nix;
   }
 

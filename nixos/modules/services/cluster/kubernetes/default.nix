@@ -214,17 +214,17 @@ in {
       services.kubernetes.apiserver.etcd.servers = mkDefault etcdEndpoints;
     })
 
-    (mkIf cfg.kubelet.enable {
-      virtualisation.docker = {
-        enable = mkDefault true;
+    #(mkIf cfg.kubelet.enable {
+    #  virtualisation.docker = {
+    #    enable = mkDefault true;
 
-        # kubernetes needs access to logs
-        logDriver = mkDefault "json-file";
+    #    # kubernetes needs access to logs
+    #    logDriver = mkDefault "json-file";
 
-        # iptables must be disabled for kubernetes
-        extraOptions = "--iptables=false --ip-masq=false";
-      };
-    })
+    #    # iptables must be disabled for kubernetes
+    #    extraOptions = "--iptables=false --ip-masq=false";
+    #  };
+    #})
 
     (mkIf (cfg.apiserver.enable || cfg.controllerManager.enable) {
       services.kubernetes.pki.certs = {

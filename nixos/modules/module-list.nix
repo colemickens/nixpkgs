@@ -838,6 +838,7 @@
   ./virtualisation/lxcfs.nix
   ./virtualisation/lxd.nix
   ./virtualisation/amazon-options.nix
+  ./virtualisation/kata.nix
   ./virtualisation/hyperv-guest.nix
   ./virtualisation/kvmgt.nix
   ./virtualisation/openvswitch.nix
