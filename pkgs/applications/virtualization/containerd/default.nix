@@ -5,13 +5,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "containerd-${version}";
-  version = "1.2.0-308d3cb60e1274429e16b5fe51a0a4147995d068";
+  version = "1.2.0-92d58bf8f01d4196b6cca09987b03f036be89d96";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
-    rev = "308d3cb60e1274429e16b5fe51a0a4147995d068";
-    sha256 = "1lhf676wl3j1q01xnvrcai69h9wg0dkxdv6palwgrzqfd6wzlvar";
+    rev = "92d58bf8f01d4196b6cca09987b03f036be89d96";
+    sha256 = "0g9nr3bz3nqjkc0gz234b15fclgz6j4mvplhrcwv9n4z1pd23n71";
   };
 
   hardeningDisable = [ "fortify" ];
