@@ -17373,14 +17373,14 @@ with pkgs;
   ksonnet = callPackage ../applications/networking/cluster/ksonnet { };
 
   # kata
-  kata-runtime = callPackage ../applications/networking/cluster/kata/runtime.nix { };
-  kata-proxy = callPackage ../applications/networking/cluster/kata/proxy.nix { };
-  kata-images = callPackage ../applications/networking/cluster/kata/images.nix { };
-  kata-shim = callPackage ../applications/networking/cluster/kata/shim.nix { };
-  kata-qemu-lite = callPackage ../applications/networking/cluster/kata/qemu.nix { };
-  kata-ksm-throttler = callPackage ../applications/networking/cluster/kata/ksm-throttler.nix { };
+  kata-runtime = callPackage ../applications/virtualization/kata/runtime.nix { };
+  kata-proxy = callPackage ../applications/virtualization/kata/proxy.nix { };
+  kata-images = callPackage ../applications/virtualization/kata/images.nix { };
+  kata-shim = callPackage ../applications/virtualization/kata/shim.nix { };
+  kata-qemu-lite = callPackage ../applications/virtualization/kata/qemu.nix { };
+  kata-ksm-throttler = callPackage ../applications/virtualization/kata/ksm-throttler.nix { };
 
-  kubecfg = callPackage ../applications/networking/cluster/kubecfg { };
+  kubecfg = callPackage ../virtualization/kubecfg { };
 
   kubernetes = callPackage ../applications/networking/cluster/kubernetes {  };
 

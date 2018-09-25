@@ -1,7 +1,7 @@
 { removeReferencesTo, lib, fetchFromGitHub, buildGoPackage, stdenv, fetchgit, go, git, ... }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.1";
+  version = "a73fd0702a65b88b0358dba9723f275876bbe3d6";
   name = "kata-runtime-${version}";
 
   # https://github.com/NixOS/nixpkgs/issues/25959
@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
 #   sha256 = "06rb3w2qm5ya6fnqlin0g7gn897ky4j0b78qjb71sdamygaz58bg";
     owner = "hyperhq";
     repo = "kata-runtime";
-    rev = "b811a7338ac942eb6f98475656081d68c26f3074";
-    sha256 = "151sgcp9yrdrak3p8cvhyvb202bg9klfx8zqp3q1sjl7w5fp94ia";
+    rev = "a73fd0702a65b88b0358dba9723f275876bbe3d6";
+    sha256 = "1rpmaqghih73yhphm6yd3cgjqcs4lkp0lp4vfr7g66d0b6zpfak8";
   };
 
   nativeBuildInputs = [ removeReferencesTo go git ];

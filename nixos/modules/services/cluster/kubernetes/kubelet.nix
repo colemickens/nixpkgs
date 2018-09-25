@@ -10,9 +10,9 @@ let
   # TODO: backward compat, support builtin dockershim as it exists pre-cri
   containerRuntimeEndpoint =
     if cfg.containerRuntime == "containerd" then
-      "/run/containerd/containerd.sock"
+      "unix:///run/containerd/containerd.sock"
     else if cfg.containerRuntime == "crio" then
-      "/run/crio/crio.sock"
+      "unix:///run/crio/crio.sock"
     else
       null;
 

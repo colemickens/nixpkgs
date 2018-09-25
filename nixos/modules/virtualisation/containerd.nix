@@ -99,10 +99,10 @@ in
 		runtime_type = "io.containerd.runc.v1"
 		runtime_engine = "io.containerd.runc.v1"
 		runtime_root = ""
-	      [plugins.cri.containerd.runtimes.runc]
-		runtime_type = "io.containerd.runc.v1"
-		runtime_engine = "io.containerd.runc.v1"
-		runtime_root = ""
+	#      [plugins.cri.containerd.runtimes.runc]
+	#	runtime_type = "io.containerd.runc.v1"
+	#	runtime_engine = "io.containerd.runc.v1"
+	#	runtime_root = ""
 	      [plugins.cri.containerd.runtimes.kata]
 		runtime_type = "io.containerd.runtime.kata.v2"
 		runtime_engine = "io.containerd.runtime.kata.v2"
