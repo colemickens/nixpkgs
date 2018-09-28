@@ -17374,8 +17374,10 @@ with pkgs;
 
   # kata
   kata-runtime = callPackage ../applications/virtualization/kata/runtime.nix { };
+  kata-agent = callPackage ../applications/virtualization/kata/agent.nix { };
   kata-proxy = callPackage ../applications/virtualization/kata/proxy.nix { };
   kata-images = callPackage ../applications/virtualization/kata/images.nix { };
+  kata-images-bin = callPackage ../applications/virtualization/kata/images-bin.nix { };
   kata-shim = callPackage ../applications/virtualization/kata/shim.nix { };
   kata-qemu-lite = callPackage ../applications/virtualization/kata/qemu.nix { };
   kata-ksm-throttler = callPackage ../applications/virtualization/kata/ksm-throttler.nix { };
