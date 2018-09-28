@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";
-    rev = "00dc70017d222b178a002ed30e9321b12647af2d";
-    sha256 = "101j65ln2k8yk0znhnsixg3b54iywp7z6s9xrk9vsd5m7qdq7sw2";
+    rev = "2abd837c8c25b0102ac4ce14f17bc0bc7ddffba7";
+    sha256 = "19jsxmvl60b7gd2gydi5gsqy8n4b3bhcpzf5x9sp5ymnwpb9b2yg";
   };
 
   outputs = [ "out" "man" ];
