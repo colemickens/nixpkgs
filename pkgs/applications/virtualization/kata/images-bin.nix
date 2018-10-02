@@ -1,7 +1,7 @@
 { removeReferencesTo, lib, fetchFromGitHub, buildGoPackage, stdenv, fetchgit, go, git, ... }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.1";
+  version = "1.3.0";
   name = "kata-images-bin-${version}";
 
   # https://github.com/NixOS/nixpkgs/issues/25959
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = builtins.fetchurl {
     url = "https://github.com/kata-containers/runtime/releases/download/${version}/kata-static-${version}-x86_64.tar.xz";
-    sha256 = "1z4cb68ng8j6mcd0lag6c3fbsxzzfsg5338qb4g730698kfayck5";
+    sha256 = "1z4cb68ng8j6mcd0lag6c3fbsxzzfsg5338qb4g730698kfayyyy";
   };
 
   installPhase = ''

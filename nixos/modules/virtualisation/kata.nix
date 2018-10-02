@@ -7,6 +7,8 @@ with lib;
 let
 
   cfg = config.virtualisation.kata-runtime;
+  #kataImages = pkgs.kata-images;
+  kataImages = pkgs.kata-images-bin;
 
 in
 
@@ -49,9 +51,9 @@ in
       environment.etc."kata-containers/configuration.toml".text = ''
 	[hypervisor.qemu]
 	path = "${pkgs.qemu}/bin/qemu-system-x86_64"
-	kernel = "${pkgs.kata-images}/share/kata-containers/vmlinuz.container"
-	initrd = "${pkgs.kata-images}/share/kata-containers/kata-containers-initrd.img"
-	#image = "${pkgs.kata-images}/share/kata-containers/kata-containers.img"
+	kernel = "${kataImages}/share/kata-containers/vmlinuz.container"
+	initrd = "${kataImages}/share/kata-containers/kata-containers-initrd.img"
+	#image = "${kataImages}/share/kata-containers/kata-containers.img"
 	machine_type = "pc"
 
 	kernel_params = ""

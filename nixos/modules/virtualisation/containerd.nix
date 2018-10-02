@@ -12,7 +12,6 @@ let
     pkgs.runc
     pkgs.kata-runtime 
     pkgs.iptables
-    pkgs.docker # see: https://github.com/moby/moby/issues/37856
   ];
 
 in
@@ -99,10 +98,10 @@ in
 		runtime_type = "io.containerd.runc.v1"
 		runtime_engine = "io.containerd.runc.v1"
 		runtime_root = ""
-	#      [plugins.cri.containerd.runtimes.runc]
-	#	runtime_type = "io.containerd.runc.v1"
-	#	runtime_engine = "io.containerd.runc.v1"
-	#	runtime_root = ""
+	      [plugins.cri.containerd.runtimes.runc]
+		runtime_type = "io.containerd.runc.v1"
+		runtime_engine = "io.containerd.runc.v1"
+		runtime_root = ""
 	      [plugins.cri.containerd.runtimes.kata]
 		runtime_type = "io.containerd.runtime.kata.v2"
 		runtime_engine = "io.containerd.runtime.kata.v2"
@@ -113,12 +112,12 @@ in
 	  [plugins.diff-service]
 	    default = ["walking"]
 	  # Todo: is this still used?
-	  [plugins.linux]
-	    shim = "containerd-shim"
-	    runtime = "runc"
-	    runtime_root = ""
-	    no_shim = false
-	    shim_debug = false
+	  #[plugins.linux]
+	  #  shim = "containerd-shim"
+	  #  runtime = "runc"
+	  #  runtime_root = ""
+	  #  no_shim = false
+	  #  shim_debug = false
 	  [plugins.scheduler]
 	    pause_threshold = 0.02
 	    deletion_threshold = 0
