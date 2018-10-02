@@ -1,7 +1,7 @@
 { removeReferencesTo, lib, fetchFromGitHub, buildGoPackage, stdenv, fetchgit, go, git, ... }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.1";
+  version = "1.3.0";
   name = "ksm-throttler-${version}";
 
   # https://github.com/NixOS/nixpkgs/issues/25959
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "kata-containers";
     repo = "ksm-throttler";
     rev = "${version}";
-    sha256 = "0dj6b7ay0kpja4ivs16a57dh44ywfv0lvm01bn9z5v9as39sb74h";
+    sha256 = "1q7ha4n0nvjlyy54cn83vy9vywfblxs1ykhfj0pyyc4b6f3wmlgr";
   };
 
   nativeBuildInputs = [ removeReferencesTo go git ];

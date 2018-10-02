@@ -1,7 +1,7 @@
 { removeReferencesTo, lib, fetchFromGitHub, buildGoPackage, stdenv, fetchgit, go, git, ... }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.1";
+  version = "1.3.0";
   name = "kata-proxy-${version}";
 
   # https://github.com/NixOS/nixpkgs/issues/25959
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "kata-containers";
     repo = "proxy";
     rev = "${version}";
-    sha256 = "1rdimfsppswn9xd03nlgkrv14wcs6303w2x1wq2akchy9jswzmdj";
+    sha256 = "0g2hc750yjjg71hmhp575qhnx8kclv54bis317asihxns16i1mmy";
   };
 
   nativeBuildInputs = [ removeReferencesTo go git ];

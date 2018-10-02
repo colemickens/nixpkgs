@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = builtins.fetchurl {
     url = "https://github.com/kata-containers/runtime/releases/download/${version}/kata-static-${version}-x86_64.tar.xz";
-    sha256 = "1z4cb68ng8j6mcd0lag6c3fbsxzzfsg5338qb4g730698kfayyyy";
+    sha256 = "1npdgm9wpb0l37s7m0dpiq9rh1k1zlw95q7z07l0np4289d6b85i";
   };
 
   installPhase = ''
