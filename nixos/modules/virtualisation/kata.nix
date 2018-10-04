@@ -34,7 +34,7 @@ in
       systemd.services."kata-ksm-throttler" = {
         description = "TODO";
 	   serviceConfig = {
-	     ExecStart = "${pkgs.kata-ksm-throttler}/libexec/ksm-throttler/ksm-throttler";
+	     ExecStart = "${pkgs.kata-ksm-throttler}/libexec/kata-ksm-throttler/kata-ksm-throttler";
              Restart = "always";
 	   };
         wantedBy = [ "multi-user.target" ]; 
@@ -42,7 +42,7 @@ in
       systemd.services."kata-vc-throttler" = {
         description = "TODO";
 	   serviceConfig = {
-	     ExecStart = "${pkgs.kata-ksm-throttler}/libexec/ksm-throttler/trigger/virtcontainers/vc";
+	     ExecStart = "${pkgs.kata-ksm-throttler}/libexec/kata-ksm-throttler/trigger/virtcontainers/vc";
              Restart = "always";
 	   };
         wantedBy = [ "multi-user.target" ]; 
