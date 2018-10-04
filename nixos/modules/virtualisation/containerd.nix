@@ -39,6 +39,8 @@ in
       environment.systemPackages = incpkgs;
 
       systemd.services.containerd = {
+        after = [ "network-online.target" "network.target" ];
+        wants = [ "network-online.target" "network.target" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           ExecStart = [ "" "${pkgs.containerd}/bin/containerd" ];
@@ -92,17 +94,27 @@ in
 	    systemd_cgroup = false
 	    enable_tls_streaming = false
 	    max_container_log_line_size = 16384
+
 	    [plugins.cri.containerd]
 	      snapshotter = "overlayfs"
+	      # TODO: totally unclear which of the three attrs are needed/used/etc
 	      [plugins.cri.containerd.default_runtime]
-		runtime_type = "io.containerd.runc.v1"
-		runtime_engine = "io.containerd.runc.v1"
+	        runtime_type = "io.containerd.runtime.v1.linux"
+		runtime_engine = ""
 		runtime_root = ""
-	      [plugins.cri.containerd.runtimes.runc]
-		runtime_type = "io.containerd.runc.v1"
-		runtime_engine = "io.containerd.runc.v1"
+	      [plugins.cri.containerd.runtimes.runc] # works
+		runtime_type = "io.containerd.runtime.v1.linux"
+		runtime_engine = ""
 		runtime_root = ""
-	      [plugins.cri.containerd.runtimes.kata]
+	#      [plugins.cri.containerd.runtimes.runcv3] # doesn't work
+	#	runtime_type = "io.containerd.runc.v1"
+	#	runtime_engine = ""
+	#	runtime_root = ""
+	#      [plugins.cri.containerd.runtimes.runcv2] # doesn't work
+	#	runtime_type = "io.containerd.runc.v1"
+	#	runtime_engine = "io.containerd.runc.v1"
+	#	runtime_root = ""
+	      [plugins.cri.containerd.runtimes.kata] # works
 		runtime_type = "io.containerd.runtime.kata.v2"
 		runtime_engine = "io.containerd.runtime.kata.v2"
 		runtime_root = ""
@@ -112,9 +124,9 @@ in
 	  [plugins.diff-service]
 	    default = ["walking"]
 	  # Todo: is this still used?
-	  #[plugins.linux]
-	  #  shim = "containerd-shim"
-	  #  runtime = "runc"
+	  [plugins.linux]
+	    shim = "containerd-shim"
+	    runtime = "runc"
 	  #  runtime_root = ""
 	  #  no_shim = false
 	  #  shim_debug = false
