@@ -84,13 +84,6 @@ in
       type = bool;
     };
 
-    # TODO: remove this deprecated flag
-    cadvisorPort = mkOption {
-      description = "Kubernetes kubelet local cadvisor port.";
-      default = 4194;
-      type = int;
-    };
-
     clusterDns = mkOption {
       description = "Use alternative DNS.";
       default = "10.1.0.1";
@@ -311,7 +304,6 @@ in
             --authentication-token-webhook \
             --authentication-token-webhook-cache-ttl="10s" \
             --authorization-mode=Webhook \
-            --cadvisor_port=${toString cfg.cadvisorPort} \
             ${optionalString (cfg.clientCaFile != null)
               "--client-ca-file=${cfg.clientCaFile}"} \
             ${optionalString (cfg.clusterDns != "")
