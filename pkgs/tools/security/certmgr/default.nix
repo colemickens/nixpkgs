@@ -19,7 +19,7 @@ buildGoPackage rec {
   patches = [
     (fetchpatch {
       url    = "https://github.com/cloudflare/certmgr/pull/51.patch";
-      sha256 = "1s5sv9199p9mxq3sci7njhm2j2gin0w86yymjk9w0y5aqawd63zc";
+      sha256 = "0jhsw159d2mgybvbbn6pmvj4yqr5cwcal5fjwkcn9m4f4zlb6qrs";
     })
   ];
 
