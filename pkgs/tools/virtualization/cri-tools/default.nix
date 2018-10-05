@@ -1,4 +1,4 @@
-{ buildGoPackage, fetchurl, lib }:
+{ buildGoPackage, lib }:
 
 let
 version = "1.12.0";
