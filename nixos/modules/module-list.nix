@@ -544,6 +544,7 @@
   ./services/networking/keybase.nix
   ./services/networking/kippo.nix
   ./services/networking/kresd.nix
+  ./services/networking/kube-router.nix
   ./services/networking/lambdabot.nix
   ./services/networking/libreswan.nix
   ./services/networking/lldpd.nix
