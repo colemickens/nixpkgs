@@ -1,0 +1,39 @@
+piVersion: v1
+kind: ConfigMap
+metadata:
+  name: kube-router-cfg
+  namespace: kube-system
+  labels:
+    tier: node
+    k8s-app: kube-router
+data:
+  cni-conf.json: |
+    {
+      "name":"kubernetes",
+      "type":"bridge",
+      "bridge":"kube-bridge",
+      "isDefaultGateway":true,
+      "ipam": {
+        "type":"host-local"
+      }
+    }
+  kubeconfig: |
+          # TODO: call mkKubeConfig and indent?
+    apiVersion: v1
+    kind: Config
+    clusterCIDR: "@CLUSTERCIDR@"
+    clusters:
+    - name: cluster
+      cluster:
+        certificate-authority: @CA_CERT@
+        server: @APISERVER@
+    users:
+    - name: kube-router
+      user:
+        tokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+    contexts:
+    - context:
+        cluster: cluster
+        user: kube-router
+      name: kube-router-context
+    current-context: kube-router-context

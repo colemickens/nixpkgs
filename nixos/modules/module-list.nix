@@ -187,6 +187,8 @@
   ./services/cluster/hadoop/default.nix
   ./services/cluster/kubernetes/addons/dns.nix
   ./services/cluster/kubernetes/addons/dashboard.nix
+  ./services/cluster/kubernetes/addons/runtimeclass
+  ./services/cluster/kubernetes/addons/kuberouter
   ./services/cluster/kubernetes/addon-manager.nix
   ./services/cluster/kubernetes/apiserver.nix
   ./services/cluster/kubernetes/controller-manager.nix

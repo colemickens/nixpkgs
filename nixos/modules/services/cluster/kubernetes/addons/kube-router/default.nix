@@ -4,6 +4,10 @@ with lib;
 
 let
   cfg = config.services.kubernetes.addons.kuberouter;
+
+  outputScript = pkgs.writeText generate '''
+    subsituteAll .
+  ''';
 in {
   options.services.kubernetes.addons.kuberouter = {
     enable = mkEnableOption "kubernetes kuberouter addon";
@@ -12,15 +16,12 @@ in {
   config = mkIf cfg.enable {
     services.kubernetes.addonManager.addons = {
       # add to the bootstrapped rbac stuff
-
-
-      kuberouter-configmap = pkgs.writeText kuberouter-configmap.yaml '''
-
-      ''';
-
-      kuberouter-daemonset = pkgs.writeText kuberouter-daemonset.yaml '''
-
-      ''';
+      kuberouter = (substituteAll {
+        src = ./kuberouter.yaml; 
+	apiserver = cfg.top.apiserver;
+	clusterCidr = cfg.top.clusterCidr;
+      };
     };
   };
 }
+

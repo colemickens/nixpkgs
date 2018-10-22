@@ -22,13 +22,31 @@ in
 
     services.kubernetes.kubelet = {
       networkPlugin = mkDefault "cni";
-      cni.config = mkDefault [{
-        name = "mynet";
-        type = "flannel";
-        delegate = {
-          isDefaultGateway = true;
-        };
-      }];
+      cni.config = mkDefault [
+        {
+          name = "mynet";
+          plugins = [
+            {
+              type = "flannel";
+              delegate = {
+                isDefaultGateway = true;
+              };
+            }
+            {
+              type = "portmap";
+              capabilities = {
+                portMappings = true;
+              };
+            }
+          ];
+        }
+        {
+          Network = "10.244.0.0/16";
+          Backend = {
+            Type = "vxlan";
+          };
+	}
+      ];
     };
 
     networking = {
