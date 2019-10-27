@@ -3,18 +3,15 @@
 , polarssl , fuse
 }:
 with stdenv.lib;
-let
-  version = "0.7.1";
-in
 stdenv.mkDerivation {
   pname = "dislocker";
-  inherit version;
+  version = "unstable-2019-07-26";
 
   src = fetchFromGitHub {
     owner = "aorimn";
     repo = "dislocker";
-    rev = "v${version}";
-    sha256 = "1crh2sg5x1kgqmdrl1nmrqwxjykxa4zwnbggcpdn97mj2gvdw7sb";
+    rev = "bc513ab178710a041870a47d19c4a4709743e441";
+    sha256 = "12nvd0bh0yjkx9gws5mlj6pkjp86j0zvpr8y02mvr941cs4lcgdp";
   };
 
   buildInputs = [ cmake fuse polarssl ];
