@@ -1,10 +1,13 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl
-, withALSA ? true, alsaLib ? null
-, withPulseAudio ? false, libpulseaudio ? null
-, withPortAudio ? false, portaudio ? null
-}:
+{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl, dbus
+, withALSA ? true, alsaLib ? null, withPulseAudio ? false, libpulseaudio ? null
+, withPortAudio ? false, portaudio ? null }:
 
-rustPlatform.buildRustPackage rec {
+let
+  features = [ "dbus_mpris" "dbus_keyring" ]
+    ++ stdenv.lib.optional withALSA "alsa_backend"
+    ++ stdenv.lib.optional withPulseAudio "pulseaudio_backend"
+    ++ stdenv.lib.optional withPortAudio "portaudio_backend";
+in rustPlatform.buildRustPackage rec {
   pname = "spotifyd";
   version = "0.2.24";
 
@@ -20,17 +23,24 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [
     "--no-default-features"
     "--features"
-    "${stdenv.lib.optionalString withALSA "alsa_backend,"}${stdenv.lib.optionalString withPulseAudio "pulseaudio_backend,"}${stdenv.lib.optionalString withPortAudio "portaudio_backend,"}"
+    (stdenv.lib.concatStringsSep "," features)
   ];
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ openssl ]
-    ++ stdenv.lib.optional withALSA alsaLib
+  buildInputs = [ openssl dbus ] ++ stdenv.lib.optional withALSA alsaLib
     ++ stdenv.lib.optional withPulseAudio libpulseaudio
     ++ stdenv.lib.optional withPortAudio portaudio;
 
   doCheck = false;
+
+  postPatch = ''
+    substituteInPlace contrib/spotifyd.service --replace "/usr/bin" "$out/bin"
+  '';
+
+  postInstall = ''
+    install -Dm644 contrib/spotifyd.service $out/lib/systemd/user/spotifyd.service
+  '';
 
   meta = with stdenv.lib; {
     description = "An open source Spotify client running as a UNIX daemon";

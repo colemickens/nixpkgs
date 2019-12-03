@@ -5,8 +5,7 @@ with lib;
 let
   cfg = config.services.spotifyd;
   spotifydConf = pkgs.writeText "spotifyd.conf" cfg.config;
-in
-{
+in {
   options = {
     services.spotifyd = {
       enable = mkEnableOption "spotifyd, a Spotify playing daemon";
@@ -24,18 +23,12 @@ in
 
   config = mkIf cfg.enable {
     systemd.services.spotifyd = {
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" "sound.target" ];
-      description = "spotifyd, a Spotify playing daemon";
       serviceConfig = {
-        ExecStart = "${pkgs.spotifyd}/bin/spotifyd --no-daemon --cache-path /var/cache/spotifyd --config-path ${spotifydConf}";
-        Restart = "always";
-        RestartSec = 12;
-        DynamicUser = true;
-        CacheDirectory = "spotifyd";
-        SupplementaryGroups = ["audio"];
+        ExecStart =
+          "${pkgs.spotifyd}/bin/spotifyd --no-daemon --config-path ${spotifydConf}";
       };
     };
+    systemd.packages = [ pkgs.spotifyd ];
   };
 
   meta.maintainers = [ maintainers.anderslundstedt ];
