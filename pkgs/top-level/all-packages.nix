@@ -23336,6 +23336,8 @@ in
 
   steamcmd = steamPackages.steamcmd;
 
+  steamlink = steamPackages.steamlink;
+
   linux-steam-integration = callPackage ../games/linux-steam-integration {
     gtk = pkgs.gtk3;
   };
