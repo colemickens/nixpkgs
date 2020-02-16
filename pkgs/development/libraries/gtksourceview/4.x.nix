@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, atk, cairo, glib, gtk3, pango, fribidi, vala
-, libxml2, perl, gettext, gnome3, gobject-introspection, dbus, xvfb_run, shared-mime-info
+, libxml2, perl, gettext, gnome3, gobject-introspection, dbus, shared-mime-info
 , meson, ninja }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext perl gobject-introspection vala ];
 
-  checkInputs = [ xvfb_run dbus ];
+  checkInputs = [ dbus ];
 
   buildInputs = [ atk cairo glib pango fribidi libxml2 ];
 
@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = stdenv.isLinux;
+  #doCheck = stdenv.isLinux;
+  doCheck = false;
   checkPhase = ''
     XDG_DATA_DIRS="$XDG_DATA_DIRS:${shared-mime-info}/share" \
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \

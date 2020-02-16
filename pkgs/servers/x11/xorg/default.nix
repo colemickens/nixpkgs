@@ -2691,16 +2691,21 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xorgserver = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, openssl, libX11, libXau, libXaw, libxcb, xcbutil, xcbutilwm, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, libXdmcp, libXfixes, libxkbfile, libXmu, libXpm, libXrender, libXres, libXt }: stdenv.mkDerivation {
-    name = "xorg-server-1.20.7";
+  xorgserver = callPackage ({ stdenv, pkgconfig, fetchgit, autoreconfHook, utilmacros, xorgproto, openssl, libX11, libXau, libXaw, libxcb, xcbutil, xcbutilwm, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, libXdmcp, libXfixes, libxkbfile, libXmu, libXpm, libXrender, libXres, libXt }: stdenv.mkDerivation {
+    name = "xorg-server-1.20.99";
     builder = ./builder.sh;
-    src = fetchurl {
-      url = mirror://xorg/individual/xserver/xorg-server-1.20.7.tar.bz2;
-      sha256 = "18bfl04ihw1jr3h0fs522nnxxq5ixjay77y9dcymnkzk23q8cndx";
+    src = fetchgit {
+      url = "https://gitlab.freedesktop.org/dirbaio/xserver";
+      # https://gitlab.freedesktop.org/dirbaio/xserver/tree/xwlScaling
+      rev = "06224bd0c6f62ac9a8917100e504cb6659ece154";
+      sha256 = "0vzkqgqfg3n3mxsaffzl231p72r7rbij4l19g84kipdl3gj6qzlx";
     };
+    preConfigure = ''
+      ./autogen.sh
+    '';
     hardeningDisable = [ "bindnow" "relro" ];
-    nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ xorgproto openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
+    nativeBuildInputs = [ pkgconfig autoreconfHook ];
+    buildInputs = [ utilmacros fontutil xorgproto openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
