@@ -970,6 +970,8 @@ in {
 
   onnx = callPackage ../development/python-modules/onnx { };
 
+  onvif-zeep-async = callPackage ../development/python-modules/onvif-zeep-async { };
+
   ordered-set = callPackage ../development/python-modules/ordered-set { };
 
   orderedmultidict = callPackage ../development/python-modules/orderedmultidict { };
