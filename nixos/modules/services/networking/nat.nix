@@ -261,6 +261,8 @@ in
         kernel.sysctl = {
           "net.ipv4.conf.all.forwarding" = mkOverride 99 true;
           "net.ipv4.conf.default.forwarding" = mkOverride 99 true;
+          "net.ipv4.conf.all.route_localnet" = mkOverride 99 true;
+          "net.ipv4.conf.default.route_localnet" = mkOverride 99 true;
         };
       };
 
