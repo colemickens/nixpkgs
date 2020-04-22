@@ -94,6 +94,7 @@ stdenv.mkDerivation ({
 
   patches = [
     ./env_var_for_system_dir.patch
+    ./pipewire.patch
   ]
   ++ patches;
 

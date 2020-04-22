@@ -1,0 +1,65 @@
+diff --git a/config/system-headers.mozbuild b/config/system-headers.mozbuild
+index 2081d0c683a4..641133bf1ea4 100644
+--- a/config/system-headers.mozbuild
++++ b/config/system-headers.mozbuild
+@@ -314,6 +314,7 @@ system_headers = [
+     'Gestalt.h',
+     'getopt.h',
+     'gio/gio.h',
++    'gio/gunixfdlist.h',
+     'glibconfig.h',
+     'glib.h',
+     'glib-object.h',
+@@ -607,6 +608,7 @@ system_headers = [
+     'Pgenerr.h',
+     'PGenErr.h',
+     'Ph.h',
++    'pipewire/pipewire.h',
+     'pixman.h',
+     'pk11func.h',
+     'pk11pqg.h',
+diff --git a/media/webrtc/trunk/webrtc/modules/desktop_capture/desktop_capture_generic_gn/moz.build b/media/webrtc/trunk/webrtc/modules/desktop_capture/desktop_capture_generic_gn/moz.build
+index 90b40431c7e4..03581f7c38b5 100644
+--- a/media/webrtc/trunk/webrtc/modules/desktop_capture/desktop_capture_generic_gn/moz.build
++++ b/media/webrtc/trunk/webrtc/modules/desktop_capture/desktop_capture_generic_gn/moz.build
+@@ -194,6 +194,28 @@ if CONFIG["OS_TARGET"] == "Linux":
+         "/media/webrtc/trunk/webrtc/modules/desktop_capture/window_capturer_linux.cc"
+     ]
+ 
++# PipeWire specific files
++if CONFIG["OS_TARGET"] == "Linux":
++
++    DEFINES["WEBRTC_USE_PIPEWIRE"] = "1"
++
++    OS_LIBS += [
++        "rt",
++        "pipewire-0.2",
++        "glib-2.0",
++        "gio-2.0",
++        "gobject-2.0"
++    ]
++
++    CXXFLAGS += CONFIG['TK_CFLAGS']
++
++    UNIFIED_SOURCES += [
++        "/media/webrtc/trunk/webrtc/modules/desktop_capture/linux/base_capturer_pipewire.cc",
++        "/media/webrtc/trunk/webrtc/modules/desktop_capture/linux/screen_capturer_pipewire.cc",
++        "/media/webrtc/trunk/webrtc/modules/desktop_capture/linux/window_capturer_pipewire.cc"
++    ]
++
++
+ if CONFIG["OS_TARGET"] == "NetBSD":
+ 
+     DEFINES["USE_X11"] = "1"
+diff --git a/media/webrtc/trunk/webrtc/modules/desktop_capture/desktop_capture_options.h b/media/webrtc/trunk/webrtc/modules/desktop_capture/desktop_capture_options.h
+index 1eb8ead26efa..316468eed1fc 100644
+--- a/media/webrtc/trunk/webrtc/modules/desktop_capture/desktop_capture_options.h
++++ b/media/webrtc/trunk/webrtc/modules/desktop_capture/desktop_capture_options.h
+@@ -141,7 +141,7 @@ class DesktopCaptureOptions {
+   bool disable_effects_ = true;
+   bool detect_updated_region_ = false;
+ #if defined(WEBRTC_USE_PIPEWIRE)
+-  bool allow_pipewire_ = false;
++  bool allow_pipewire_ = true;
+ #endif
+ };
