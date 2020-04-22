@@ -23,6 +23,7 @@
 , gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
 , waylandSupport ? true, libxkbcommon
 , gssSupport ? true, kerberos
+, pipewireSupport ? true, pipewire_0_2
 
 ## privacy-related options
 
@@ -94,9 +95,9 @@ stdenv.mkDerivation ({
 
   patches = [
     ./env_var_for_system_dir.patch
-    ./pipewire.patch
   ]
-  ++ patches;
+  ++ patches
+  ++ lib.optional pipewireSupport ./pipewire.patch;
 
 
   # Ignore trivial whitespace changes in patches, this fixes compatibility of
@@ -127,6 +128,7 @@ stdenv.mkDerivation ({
   ++ lib.optional  gtk3Support gtk3
   ++ lib.optional  gssSupport kerberos
   ++ lib.optional  waylandSupport libxkbcommon
+  ++ lib.optional  pipewireSupport pipewire_0_2
   ++ lib.optionals stdenv.isDarwin [ CoreMedia ExceptionHandling Kerberos
                                      AVFoundation MediaToolbox CoreLocation
                                      Foundation libobjc AddressBook cups ];
