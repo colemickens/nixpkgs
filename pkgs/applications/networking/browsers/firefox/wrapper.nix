@@ -9,7 +9,6 @@
 , fx_cast_bridge
 , udev
 , kerberos
-, libva
 }:
 
 ## configurability of the wrapper itself
@@ -65,7 +64,7 @@ let
           ++ lib.optional (cfg.enableFXCastBridge or false) fx_cast_bridge
           ++ extraNativeMessagingHosts
         );
-      libs =   lib.optionals stdenv.isLinux [ udev libva ]
+      libs =   lib.optional stdenv.isLinux udev
             ++ lib.optional ffmpegSupport ffmpeg_4
             ++ lib.optional gssSupport kerberos
             ++ lib.optional gdkWayland libglvnd

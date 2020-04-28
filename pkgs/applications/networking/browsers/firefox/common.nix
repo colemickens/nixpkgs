@@ -23,7 +23,7 @@
 , gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
 , waylandSupport ? true, libxkbcommon
 , gssSupport ? true, kerberos
-, vaapiSupport ? true, libva
+, vaapiSupport ? true, libva, wayland
 
 ## privacy-related options
 
@@ -127,7 +127,7 @@ stdenv.mkDerivation ({
   ++ lib.optional  gtk3Support gtk3
   ++ lib.optional  gssSupport kerberos
   ++ lib.optional  waylandSupport libxkbcommon
-  ++ lib.optional  vaapiSupport libva
+  ++ lib.optionals vaapiSupport [ libva wayland ]
   ++ lib.optionals stdenv.isDarwin [ CoreMedia ExceptionHandling Kerberos
                                      AVFoundation MediaToolbox CoreLocation
                                      Foundation libobjc AddressBook cups ];
