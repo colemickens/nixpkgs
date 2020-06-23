@@ -844,6 +844,18 @@ let
     meta.homepage = "https://github.com/rhysd/committia.vim/";
   };
 
+  completion-nvim = buildVimPluginFrom2Nix {
+    pname = "completion-nvim";
+    version = "2020-06-21";
+    src = fetchFromGitHub {
+      owner = "haorenW1025";
+      repo = "completion-nvim";
+      rev = "f5ee2a396a3abcdbb0e4548d51b3241503c47128";
+      sha256 = "0ikvdxmjlrybk9fhqsvizj2f7vlpg96vrzgzvzfw5z6clbjxn1b9";
+    };
+    meta.homepage = "https://github.com/haorenW1025/completion-nvim/";
+  };
+
   completion-treesitter = buildVimPluginFrom2Nix {
     pname = "completion-treesitter";
     version = "2020-06-19";
