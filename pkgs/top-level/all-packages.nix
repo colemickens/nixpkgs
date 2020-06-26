@@ -2281,6 +2281,8 @@ in
     libmaxminddb = null;
   };
 
+  rumatui = callPackage ../applications/networking/instant-messengers/rumatui { };
+
   xmousepasteblock = callPackage ../tools/X11/xmousepasteblock { };
 
   mar1d = callPackage ../games/mar1d { } ;
