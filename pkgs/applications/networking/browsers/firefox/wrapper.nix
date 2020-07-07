@@ -26,11 +26,11 @@ let
     , nameSuffix ? ""
     , icon ? browserName
     , extraNativeMessagingHosts ? []
-    , gdkWayland ? false
+    , forceWayland ? false
     , cfg ? config.${browserName} or {}
     }:
 
-    assert gdkWayland -> (browser ? gtk3); # Can only use the wayland backend if gtk3 is being used
+    assert forceWayland -> (browser ? gtk3); # Can only use the wayland backend if gtk3 is being used
 
     let
       enableAdobeFlash = cfg.enableAdobeFlash or false;
@@ -124,8 +124,8 @@ let
             --set SNAP_NAME "firefox" \
             --set MOZ_LEGACY_PROFILES 1 \
             --set MOZ_ALLOW_DOWNGRADE 1 \
-            ${lib.optionalString gdkWayland ''
-              --set GDK_BACKEND "wayland" \
+            ${lib.optionalString forceWayland ''
+              --set MOZ_ENABLE_WAYLAND "1" \
             ''}${lib.optionalString (browser ? gtk3)
                 ''--prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
                   --suffix XDG_DATA_DIRS : '${gnome3.adwaita-icon-theme}/share'
