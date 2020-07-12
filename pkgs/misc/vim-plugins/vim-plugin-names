@@ -429,6 +429,7 @@ sakhnik/nvim-gdb
 saltstack/salt-vim
 samoshkin/vim-mergetool
 sbdchd/neoformat
+scalameta/coc-metals
 sebastianmarkow/deoplete-rust
 SevereOverfl0w/deoplete-github
 sheerun/vim-polyglot

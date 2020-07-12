@@ -519,6 +519,18 @@ let
     meta.homepage = "https://github.com/neoclide/coc-lists/";
   };
 
+  coc-metals = buildVimPluginFrom2Nix {
+    pname = "coc-metals";
+    version = "2020-07-09";
+    src = fetchFromGitHub {
+      owner = "scalameta";
+      repo = "coc-metals";
+      rev = "630450a7cd1e777ddf1392e672838de2e2965b7c";
+      sha256 = "1s1w0qkihphqj2mpc0b100g8ji23gaa4w9msndp0h6pjp2fkd9hr";
+    };
+    meta.homepage = "https://github.com/scalameta/coc-metals/";
+  };
+
   coc-neco = buildVimPluginFrom2Nix {
     pname = "coc-neco";
     version = "2020-04-07";
