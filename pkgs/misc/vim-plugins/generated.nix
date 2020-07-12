@@ -519,18 +519,6 @@ let
     meta.homepage = "https://github.com/neoclide/coc-lists/";
   };
 
-  coc-metals = buildVimPluginFrom2Nix {
-    pname = "coc-metals";
-    version = "2020-07-04";
-    src = fetchFromGitHub {
-      owner = "ckipp01";
-      repo = "coc-metals";
-      rev = "3dbe29b9462a1dd910ff653564cadd72146386c8";
-      sha256 = "1j2z557lzsr25s9ijdfiyg8zd7f967qnq8imacwn6qzfs1r337nj";
-    };
-    meta.homepage = "https://github.com/ckipp01/coc-metals/";
-  };
-
   coc-neco = buildVimPluginFrom2Nix {
     pname = "coc-neco";
     version = "2020-04-07";
