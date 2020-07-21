@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, gettext, intltool
+{ stdenv, fetchFromGitHub, fetchFromGitLab, autoconf, automake, gettext, intltool
 , libtool, pkgconfig, wrapGAppsHook, wrapPython, gobject-introspection
 , gtk3, python, pygobject3, pyxdg
 
@@ -14,14 +14,9 @@
 
 let
   mkRedshift =
-    { pname, version, src, meta }:
+    { pname, version, src, meta, appname?"redshift", patches?[./575.patch] }:
     stdenv.mkDerivation rec {
       inherit pname version src meta;
-
-      patches = [
-        # https://github.com/jonls/redshift/pull/575
-        ./575.patch
-      ];
 
       nativeBuildInputs = [
         autoconf
@@ -63,10 +58,10 @@ let
       # the geoclue agent may inspect these paths and expect them to be
       # valid without having the correct $PATH set
       postInstall = ''
-        substituteInPlace $out/share/applications/redshift.desktop \
-          --replace 'Exec=redshift' "Exec=$out/bin/redshift"
-        substituteInPlace $out/share/applications/redshift.desktop \
-          --replace 'Exec=redshift-gtk' "Exec=$out/bin/redshift-gtk"
+        substituteInPlace $out/share/applications/${appname}.desktop \
+          --replace 'Exec=${appname}' "Exec=$out/bin/${appname}"
+        substituteInPlace $out/share/applications/${appname}.desktop \
+          --replace 'Exec=${appname}-gtk' "Exec=$out/bin/${appname}-gtk"
       '';
 
       enableParallelBuilding = true;
@@ -118,4 +113,24 @@ rec {
       homepage = "https://github.com/minus7/redshift";
     };
   };
+
+  gammastep = let
+    version = "2.0.1";
+  in 
+    mkRedshift {
+      pname = "gammastep";
+      inherit version;
+      appname = "gammastep";
+      src = fetchFromGitLab {
+        owner = "chinstrap";
+        repo = "gammastep";
+        rev = "v${version}";
+        sha256 = "1ky4h892sg2mfbwwq5xv0vnjflsl2x3nsy5q456r1kyk1gwkj0rg";
+      };
+      meta = redshift.meta // {
+        description = "Maintained fork of redshift";
+        homepage = "https://gitlab.com/chinstrap/gammastep";
+      };
+      patches = [];
+    };
 }
