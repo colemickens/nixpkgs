@@ -29,10 +29,55 @@ let
     description = "Tor isolation options";
   };
 
+  tor-boot-script = pkgs.writeShellScript "torboot" (concatStrings (flip mapAttrsToList cfg.hiddenServices (n: v:
+    if v.keyPath == null then "" else ''
+      set -x
+      set -e
+      # prep (ok)
+      rm -rf "${torDirectory}/onion/${v.name}"
+      mkdir -p "${torDirectory}/onion/${v.name}"
+
+      # one attempt
+      #cp "${v.keyPath}" "${torDirectory}/onion/${v.name}/hs_ed25519_secret_key"
+
+
+      # two attempt
+      ln -s "${v.keyPath}" "${torDirectory}/onion/${v.name}/hs_ed25519_secret_key"
+
+      # fix up permissions (mostly ok?)
+
+      chown -R ${toString config.ids.uids.tor}:${toString config.ids.gids.tor} "${torDirectory}/onion/${v.name}"
+      chmod -R 0700 "${torDirectory}/onion/${v.name}"
+
+      # woo
+      echo "--------------------------------------"
+      ls -al "${torDirectory}/onion/${v.name}"
+      ls -al "$(readlink "${torDirectory}/onion/${v.name}/hs_ed25519_secret_key")"
+      cat "${torDirectory}/onion/${v.name}/hostname" || true
+      echo "--------------------------------------"
+      set +x
+    ''))
+  );
+
+    tor-boot-script-2 = pkgs.writeShellScript "torboot" (concatStrings (flip mapAttrsToList cfg.hiddenServices (n: v:
+    if v.keyPath == null then "" else ''
+      set -x
+      set -e
+
+      # woo
+      echo "22--------------------------------------"
+      chown ${toString config.ids.uids.tor}:${toString config.ids.gids.tor}  "${torDirectory}/onion/${v.name}/hs_ed25519_public_key"
+      ls -al "${torDirectory}/onion/${v.name}"
+      ls -al "$(readlink "${torDirectory}/onion/${v.name}/hs_ed25519_secret_key")"
+      echo "22--------------------------------------"
+      set +x
+    ''))
+  );
 
   torRc = ''
     User tor
     DataDirectory ${torDirectory}
+    Log debug file ${torDirectory}/debug.log
     ${optionalString cfg.enableGeoIP ''
       GeoIPFile ${cfg.package.geoip}/share/tor/geoip
       GeoIPv6File ${cfg.package.geoip}/share/tor/geoip6
@@ -623,6 +668,15 @@ in
                '';
              };
 
+             keyPath = mkOption {
+               type = types.nullOr types.str;
+               description = ''
+                 Path to the private key to import for this tor hidden service.
+
+                 This will be copied to the ${torDirectory}/onion/${name}.
+               '';
+             };
+
              map = mkOption {
                default = [];
                description = "Port mapping for this hidden service.";
@@ -759,8 +813,12 @@ in
         serviceConfig =
           { Type         = "simple";
             # Translated from the upstream contrib/dist/tor.service.in
-            ExecStartPre = "${cfg.package}/bin/tor -f ${torRcFile} --verify-config";
-            ExecStart    = "${cfg.package}/bin/tor -f ${torRcFile}";
+            ExecStartPre = [
+              tor-boot-script
+              "${cfg.package}/bin/tor -f ${torRcFile} --verify-config"
+              tor-boot-script-2
+            ];
+            ExecStart    = "${pkgs.tor}/bin/tor -f ${torRcFile}";
             ExecReload   = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
             KillSignal   = "SIGINT";
             TimeoutSec   = 30;
@@ -769,7 +827,7 @@ in
 
             # Hardening
             # this seems to unshare /run despite what systemd.exec(5) says
-            PrivateTmp              = mkIf (!cfg.controlSocket.enable) "yes";
+            #PrivateTmp              = mkIf (!cfg.controlSocket.enable) "yes";
             PrivateDevices          = "yes";
             ProtectHome             = "yes";
             ProtectSystem           = "strict";
