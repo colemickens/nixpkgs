@@ -13,6 +13,7 @@ let
   sha256 = {
     x86_64-linux = "0yv6584y4idkl9vvmpxj5ix5brshm1vadiwf7ima84snm0fipb0n";
     x86_64-darwin = "0igndxkwkxyjc9rkf9hbj8903hvfv7ab41q0s3gw8w5qh4b8s48x";
+    aarch64-linux = "0yv6584y4idkl9vvmpxj5ix5brshm1vadiwf7ima84snm0fipb0n";
   }.${system};
 in
   callPackage ./generic.nix rec {
@@ -52,6 +53,6 @@ in
       downloadPage = "https://code.visualstudio.com/Updates";
       license = licenses.unfree;
       maintainers = with maintainers; [ eadwu synthetica ];
-      platforms = [ "x86_64-linux" "x86_64-darwin" ];
+      platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
     };
   }
