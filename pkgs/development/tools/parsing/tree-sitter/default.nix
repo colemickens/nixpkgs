@@ -15,13 +15,13 @@ let
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
   # 3) run the ./result script that is output by that (it updates ./grammars)
   version = "0.17.3";
-  sha256 = "sha256-uQs80r9cPX8Q46irJYv2FfvuppwonSS5HVClFujaP+U=";
-  cargoSha256 = "sha256-fonlxLNh9KyEwCj7G5vxa7cM/DlcHNFbQpp0SwVQ3j4=";
+  sha256 = "sha256-eEM6eqkzubhc2EODQFxHi0PKGMK9U4kvFXQoC0gFDpg=";
+  cargoSha256 = "sha256-0REkObr3aLcl6sPLarNFb6pLojq2nfmevUM3HbmoKs4=";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "tree-sitter";
-    rev = version;
+    rev = "f65c100522620240dc7724e3167b404131485354";
     inherit sha256;
     fetchSubmodules = true;
   };
@@ -106,8 +106,6 @@ in rustPlatform.buildRustPackage {
     '';
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Profpatsch ];
-    # Aarch has test failures with how tree-sitter compiles the generated C files
-    broken = stdenv.isAarch64;
   };
 
 }
