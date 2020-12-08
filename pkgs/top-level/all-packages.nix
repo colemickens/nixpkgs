@@ -23980,6 +23980,7 @@ in
   pantalaimon = python3Packages.callPackage ../applications/networking/instant-messengers/pantalaimon { };
 
   pavucontrol = callPackage ../applications/audio/pavucontrol { };
+  pavucontrol-qt = lxqt.pavucontrol-qt;
 
   paraview = libsForQt5.callPackage ../applications/graphics/paraview { };
 
