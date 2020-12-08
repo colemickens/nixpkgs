@@ -1,9 +1,10 @@
-{ config, lib, pkgs, modules, baseModules, ... }:
+args_@{ config, lib, pkgs, modules, baseModules, ... }:
 
 with lib;
 
 let
-
+  ignorekeys = [ "config" "lib" "pkgs" "modules" "baseModules" ];
+  args = filterAttrs (n: v: (!builtins.elem n ignorekeys)) args_;
 
   # This attribute is responsible for creating boot entries for
   # child configuration. They are only (directly) accessible
@@ -19,6 +20,7 @@ let
            (optionals childConfig.inheritParentConfig modules)
         ++ [ ./no-clone.nix ]
         ++ [ childConfig.configuration ];
+        specialArgs = args;
       }).config.system.build.toplevel
     ) config.specialisation;
 
