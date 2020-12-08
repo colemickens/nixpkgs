@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, perl, cdrkit, syslinux, xz, openssl, gnu-efi, mtools
+{ stdenv, lib, fetchFromGitHub, perl, cdrkit, syslinux ? null, xz, openssl, gnu-efi, mtools
 , embedScript ? null
 , additionalTargets ? {}
 }:
@@ -8,12 +8,20 @@ let
     "bin-x86_64-efi/ipxe.efi" = null;
     "bin-x86_64-efi/ipxe.efirom" = null;
     "bin-x86_64-efi/ipxe.usb" = "ipxe-efi.usb";
-  } // {
+  } // lib.optionalAttrs (stdenv.isi686 || stdenv.isx86_64) {
     "bin/ipxe.dsk" = null;
     "bin/ipxe.usb" = null;
     "bin/ipxe.iso" = null;
     "bin/ipxe.lkrn" = null;
     "bin/undionly.kpxe" = null;
+  } // lib.optionalAttrs stdenv.isAarch32 {
+    "bin-arm32-efi/ipxe.efi" = null;
+    "bin-arm32-efi/ipxe.efirom" = null;
+    "bin-arm32-efi/ipxe.usb" = "ipxe-efi.usb";
+  } // lib.optionalAttrs stdenv.isAarch64 {
+    "bin-arm64-efi/ipxe.efi" = null;
+    "bin-arm64-efi/ipxe.efirom" = null;
+    "bin-arm64-efi/ipxe.usb" = "ipxe-efi.usb";
   };
 in
 
@@ -21,7 +29,7 @@ stdenv.mkDerivation rec {
   pname = "ipxe";
   version = "1.20.1";
 
-  nativeBuildInputs = [ perl cdrkit syslinux xz openssl gnu-efi mtools ];
+  nativeBuildInputs = [ perl cdrkit xz openssl gnu-efi mtools ] ++ lib.optional (stdenv.isi686 || stdenv.isx86_64) syslinux;
 
   src = fetchFromGitHub {
     owner = "ipxe";
@@ -37,8 +45,9 @@ stdenv.mkDerivation rec {
 
   makeFlags =
     [ "ECHO_E_BIN_ECHO=echo" "ECHO_E_BIN_ECHO_E=echo" # No /bin/echo here.
-      "ISOLINUX_BIN_LIST=${syslinux}/share/syslinux/isolinux.bin"
+    ] ++ lib.optionals (stdenv.isi686 || stdenv.isx86_64) [
       "LDLINUX_C32=${syslinux}/share/syslinux/ldlinux.c32"
+      "ISOLINUX_BIN_LIST=${syslinux}/share/syslinux/isolinux.bin"
     ] ++ lib.optional (embedScript != null) "EMBED=${embedScript}";
 
 
@@ -77,7 +86,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib;
     { description = "Network boot firmware";
-      homepage = "https://ipxe.org/";
+      homepage = https://ipxe.org/;
       license = licenses.gpl2;
       maintainers = with maintainers; [ ehmry ];
       platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
