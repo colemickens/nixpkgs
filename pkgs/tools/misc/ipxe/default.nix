@@ -80,6 +80,6 @@ stdenv.mkDerivation rec {
       homepage = "https://ipxe.org/";
       license = licenses.gpl2;
       maintainers = with maintainers; [ ehmry ];
-      platforms = [ "x86_64-linux" "i686-linux" ];
+      platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
     };
 }
