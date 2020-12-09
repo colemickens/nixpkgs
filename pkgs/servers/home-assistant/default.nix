@@ -9,8 +9,7 @@
 # Override Python packages using
 # self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
 # Applied after defaultOverrides
-, packageOverrides ? self: super: {
-}
+, packageOverrides ? self: super: {}
 
 # Skip pip install of required packages on startup
 , skipPip ? true }:
@@ -37,7 +36,7 @@ let
 
   mkOverride = attrname: version: sha256:
     self: super: {
-      ${attrname} = super.${attrname}.overridePythonAttrs (oldAttrs: {
+      "${attrname}" = super.${attrname}.overridePythonAttrs (oldAttrs: {
         inherit version;
         src = oldAttrs.src.override {
           inherit version sha256;
@@ -90,7 +89,9 @@ in with py.pkgs; buildPythonApplication rec {
       --replace "bcrypt==3.1.7" "bcrypt>=3.1.7" \
       --replace "cryptography==3.2" "cryptography" \
       --replace "requests==2.25.0" "requests>=2.24.0" \
-      --replace "ruamel.yaml==0.15.100" "ruamel.yaml>=0.15.100"
+      --replace "ruamel.yaml==0.15.100" "ruamel.yaml>=0.15.100" \
+      --replace "pip>=8.0.3,<20.3" "pip>=8.0.3,<=20.3" \
+      --replace "attrs==19.3.0" "attrs==19.4.0"
     substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
   '';
 
