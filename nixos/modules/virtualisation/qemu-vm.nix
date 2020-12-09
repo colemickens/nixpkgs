@@ -331,6 +331,24 @@ in
             '';
       };
 
+    virtualisation.useSpice =
+      mkOption {
+        default = false;
+        description =
+          ''
+            Whether to run QEMU with SPICE enabled.
+          '';
+      };
+
+    virtualisation.spicePort =
+      mkOption {
+        default = 5930;
+        description =
+          ''
+            Which port to use for SPICE.
+          '';
+      };
+
     virtualisation.cores =
       mkOption {
         default = 1;
@@ -629,6 +647,16 @@ in
       ])
       (mkIf (!cfg.graphics) [
         "-nographic"
+      ])
+      (mkIf (cfg.graphics) [
+        "-vga qxl"
+      ])
+      (mkIf (cfg.useSpice) [
+        "-vga qxl"
+        "-device virtio-serial-pci"
+        "-spice port=${toString cfg.spicePort},disable-ticketing"
+        "-device virtserialport,chardev=spicechannel0,name=com.redhat.spice.0"
+        "-chardev spicevmc,id=spicechannel0,name=vdagent"
       ])
     ];
 
