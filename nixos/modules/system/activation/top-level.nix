@@ -19,6 +19,7 @@ let
         modules =
            (optionals childConfig.inheritParentConfig modules)
         ++ [ ./no-clone.nix ]
+        # TODO: add a module here that passes information in that identify this as a sub-configuration, and links back to the parent (does this make a circ ref tho)
         ++ [ childConfig.configuration ];
         specialArgs = args;
       }).config.system.build.toplevel
