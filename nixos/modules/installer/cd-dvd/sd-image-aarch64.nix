@@ -37,6 +37,7 @@
         kernel=u-boot-rpi4.bin
         enable_gic=1
         armstub=armstub8-gic.bin
+        device_tree=bcm2711-rpi-4-b.dtb
 
         # Otherwise the resolution will be weird in most cases, compared to
         # what the pi3 firmware does by default.
@@ -67,7 +68,12 @@
         # Add pi4 specific files
         cp ${pkgs.ubootRaspberryPi4_64bit}/u-boot.bin firmware/u-boot-rpi4.bin
         cp ${pkgs.raspberrypi-armstubs}/armstub8-gic.bin firmware/armstub8-gic.bin
-        cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2711-rpi-4-b.dtb firmware/
+        #cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2711-rpi-4-b.dtb firmware/
+        set -x
+        ls ${pkgs.linuxPackages.kernel}
+        ls ${pkgs.linuxPackages.kernel.src}
+        cp ${pkgs.linuxPackages.kernel.src}/arch/arm/boot/dts/bcm2711-rpi-4-b.dtb firmware/
+        set +x
       '';
     populateRootCommands = ''
       mkdir -p ./files/boot
