@@ -9,12 +9,15 @@ let
 
   builderUboot = import ./uboot-builder.nix { inherit pkgs configTxt; inherit (cfg) version; };
   builderGeneric = import ./raspberrypi-builder.nix { inherit pkgs configTxt; };
+  builderRpi4uefi = import ./rpi4uefi-builder.nix { inherit pkgs config lib; };
 
   builder =
     if cfg.uboot.enable then
       "${builderUboot} -g ${toString cfg.uboot.configurationLimit} -t ${timeoutStr} -c"
+    else if cfg.rpi4uefi.enable then
+      "${builderRpi4uefi} -g ${toString cfg.uboot.configurationLimit} -t ${timeoutStr} -c"
     else
-      "${builderGeneric} -c";
+      builtins.trace "FUUUCK" "${builderGeneric} -c";
 
   blCfg = config.boot.loader;
   timeoutStr = if blCfg.timeout == null then "-1" else toString blCfg.timeout;
@@ -64,6 +67,16 @@ in
         '';
       };
 
+      rpi4uefi = {
+        enable = mkOption {
+          default = false;
+          type = types.bool;
+          description = ''
+            Enable using rpi4uefi as bootmanager for the raspberry pi.
+          '';
+        };
+      };
+
       uboot = {
         enable = mkOption {
           default = false;
@@ -101,7 +114,7 @@ in
       message = "Only Raspberry Pi >= 3 supports aarch64.";
     };
 
-    system.build.installBootLoader = builder;
+    system.build.installBootLoader = builtins.trace builder builder;
     system.boot.loader.id = "raspberrypi";
     system.boot.loader.kernelFile = platform.kernelTarget;
   };
