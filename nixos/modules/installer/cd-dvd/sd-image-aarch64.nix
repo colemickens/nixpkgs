@@ -68,17 +68,16 @@
         # Add pi4 specific files
         cp ${pkgs.ubootRaspberryPi4_64bit}/u-boot.bin firmware/u-boot-rpi4.bin
         cp ${pkgs.raspberrypi-armstubs}/armstub8-gic.bin firmware/armstub8-gic.bin
-        #cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2711-rpi-4-b.dtb firmware/
-        set -x
-        ls ${pkgs.linuxPackages.kernel}
-        ls ${pkgs.linuxPackages.kernel.src}
-        cp ${pkgs.linuxPackages.kernel.src}/arch/arm/boot/dts/bcm2711-rpi-4-b.dtb firmware/
-        set +x
+        cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2711-rpi-4-b.dtb firmware/
+
+        mkdir firmware/boot
+        ${config.boot.loader.generic-extlinux-compatible.populateCmd} -c ${config.system.build.toplevel} -d firmware/boot/
       '';
     populateRootCommands = ''
-      mkdir -p ./files/boot
-      ${config.boot.loader.generic-extlinux-compatible.populateCmd} -c ${config.system.build.toplevel} -d ./files/boot
     '';
+    #  mkdir -p ./files/boot
+    #  ${config.boot.loader.generic-extlinux-compatible.populateCmd} -c ${config.system.build.toplevel} -d ./files/boot
+    #'';
   };
 
   # the installation media is also the installation target,

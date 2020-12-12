@@ -146,6 +146,14 @@ in
 
     sdImage.storePaths = [ config.system.build.toplevel ];
 
+    system.build.bootfiles = pkgs.runCommandNoCC "mkboot" {} ''
+      set -x
+      mkdir firmware
+      ${config.sdImage.populateFirmwareCommands}
+      mkdir $out
+      cp -a firmware $out/
+    '';
+
     system.build.sdImage = pkgs.callPackage ({ stdenv, dosfstools, e2fsprogs,
     mtools, libfaketime, util-linux, zstd }: stdenv.mkDerivation {
       name = config.sdImage.imageName;
