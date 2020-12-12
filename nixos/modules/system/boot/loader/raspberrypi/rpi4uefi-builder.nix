@@ -5,10 +5,10 @@ let
   '';
 
   systemdBootBuilder =
-    import ../systemd-boot/systemd-boot.nix {
+    (import ../systemd-boot/gummiboot-builder.nix {
       pkgs = pkgs.buildPackages;
       inherit config lib;
-    };
+    });
 in
 pkgs.substituteAll {
   src = ./rpi4uefi-builder.sh;
@@ -16,5 +16,7 @@ pkgs.substituteAll {
   inherit (pkgs) bash;
   path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
   rpi4uefi = pkgs.rpi4-uefi;
+  systemdBootBuilder = "${systemdBootBuilder}";
+  efiSysMountPoint = config.boot.loader.efi.efiSysMountPoint;
   inherit configTxt;
 }

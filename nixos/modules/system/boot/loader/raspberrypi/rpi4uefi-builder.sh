@@ -1,10 +1,12 @@
 #! @bash@/bin/sh -e
 
-target=/boot # Target directory
+target=@efiSysMountPoint@ # Target directory
+config=""
 
 while getopts "t:c:d:g:" opt; do
     case "$opt" in
         d) target="$OPTARG" ;;
+        c) config="$OPTARG" ;;
         *) ;;
     esac
 done
@@ -16,8 +18,7 @@ copyForced() {
     mv $dst.tmp $dst
 }
 
-# Call the extlinux builder
-"@systemdBootBuilder@" "$@"
+"@systemdBootBuilder@" "${config}"
 
 # Add the firmware files
 rpi4uefidir=@rpi4uefi@
