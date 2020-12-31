@@ -2269,6 +2269,8 @@ in
 
   fzf-zsh = callPackage ../shells/zsh/fzf-zsh { };
 
+  zsh-fzy = callPackage ../shells/zsh/zsh-fzy { };
+
   fzy = callPackage ../tools/misc/fzy { };
 
   g2o = libsForQt5.callPackage ../development/libraries/g2o { };
