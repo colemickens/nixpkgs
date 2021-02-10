@@ -55,7 +55,7 @@
         avoid_warnings=1
       '';
       in ''
-        (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/firmware/)
+        (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp -r overlays bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/firmware/)
 
         # Add the config
         cp ${configTxt} firmware/config.txt
