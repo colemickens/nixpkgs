@@ -127,6 +127,8 @@ in
           ip link set "$iface" up && ifaces="$ifaces $iface"
         done
 
+        sleep 5 # give links time to come up
+
         # Acquire DHCP leases.
         for iface in ${dhcpIfShellExpr}; do
           echo "acquiring IP address via DHCP on $iface..."
