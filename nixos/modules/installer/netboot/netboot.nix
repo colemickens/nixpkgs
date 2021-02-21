@@ -25,7 +25,7 @@ with lib;
 
     # !!! Hack - attributes expected by other modules.
     environment.systemPackages = [ pkgs.grub2_efi ]
-      ++ (if pkgs.stdenv.hostPlatform.system == "aarch64-linux"
+      ++ (if (pkgs.stdenv.hostPlatform.system == "aarch64-linux" || pkgs.stdenv.hostPlatform.system == "armv7l-linux" )
           then []
           else [ pkgs.grub2 pkgs.syslinux ]);
 
