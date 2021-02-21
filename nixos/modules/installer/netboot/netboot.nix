@@ -99,7 +99,9 @@ with lib;
       ''
         # After booting, register the contents of the Nix store
         # in the Nix database in the tmpfs.
-        ${config.nix.package}/bin/nix-store --load-db < /nix/store/nix-path-registration
+        if [[ -f /nix/store/nix-path-registration ]]; then
+          ${config.nix.package}/bin/nix-store --load-db < /nix/store/nix-path-registration
+        fi
 
         # nixos-rebuild also requires a "system" profile and an
         # /etc/NIXOS tag.
