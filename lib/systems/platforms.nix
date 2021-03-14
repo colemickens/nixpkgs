@@ -486,6 +486,15 @@ rec {
     };
   };
 
+  xbox = {
+    linux-kernel = {
+      name = "xbox";
+      target = "vmlinux";
+      autoModules = false;
+      baseConfig = "xbox_defconfig";
+    };
+  };
+
   select = platform:
     # x86
     /**/ if platform.isx86 then pc

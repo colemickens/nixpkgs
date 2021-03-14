@@ -248,6 +248,10 @@ rec {
     libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
   };
 
+  xbox = {
+    config = "i386-unknown-linux";
+  };
+
   # BSDs
 
   amd64-netbsd = {
