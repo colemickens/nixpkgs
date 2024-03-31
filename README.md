@@ -13,6 +13,8 @@
   <a href="https://opencollective.com/nixos"><img src="https://opencollective.com/nixos/tiers/supporter/badge.svg?label=supporters&color=brightgreen" alt="Open Collective supporters" /></a>
 </p>
 
+This is `cmpkgs`.
+
 [Nixpkgs](https://github.com/nixos/nixpkgs) is a collection of over
 100,000 software packages that can be installed with the
 [Nix](https://nixos.org/nix/) package manager. It also implements
