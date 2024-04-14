@@ -1,7 +1,8 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, cmake
+, meson
+, ninja
 , pkg-config
 , libusb1
 , systemd
@@ -9,31 +10,24 @@
 
 stdenv.mkDerivation rec {
   pname = "libtypec";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "Rajaram-Regupathy";
     repo = pname;
     rev = "${pname}-${version}";
-    hash = "sha256-8b+gkfghhUFDW0bVl0Gl0Q63ptLJqSuNTLMJ/fDndBE=";
+    hash = "sha256-lHKaKp2lmoxxxx5hEfhqfPP4pE5jF6eUh1U4zZYZRd4=";
   };
 
-  outputs = [ "out" "bin" ];
-
-  # patches = [
-  #   ./cmake-utils-rpath-install.patch
-  # ];
-
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
 
   buildInputs = [
     libusb1
     systemd
-  ];
-
-  cmakeFlags = [
-    "-DCMAKE_INSTALL_LIBDIR=${placeholder "out"}/lib"
-    "-DCMAKE_INSTALL_BINDIR=${placeholder "bin"}/bin"
   ];
 
   # postInstall = ''
