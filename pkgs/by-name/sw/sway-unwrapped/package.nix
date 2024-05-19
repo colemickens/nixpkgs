@@ -71,7 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     sd-bus-provider =  if systemdSupport then "libsystemd" else "basu";
     in [
       (mesonOption "sd-bus-provider" sd-bus-provider)
-      (mesonEnable "xwayland" finalAttrs.enableXWayland)
       (mesonEnable "tray" finalAttrs.trayEnabled)
     ];
 
