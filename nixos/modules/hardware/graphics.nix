@@ -100,10 +100,6 @@ in
   config = lib.mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.enable32Bit -> pkgs.stdenv.isx86_64;
-        message = "`hardware.graphics.enable32Bit` only makes sense on a 64-bit system.";
-      }
-      {
         assertion = cfg.enable32Bit -> (config.boot.kernelPackages.kernel.features.ia32Emulation or false);
         message = "`hardware.graphics.enable32Bit` requires a kernel that supports 32-bit emulation";
       }
