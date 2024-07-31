@@ -733,6 +733,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s bin "$out/sbin"
 
     rm -rf $out/etc/rpm
+    rm $out/lib/udev/rules.d/80-drivers.rules
   '' + lib.optionalString (!withKernelInstall) ''
     # "kernel-install" shouldn't be used on NixOS.
     find $out -name "*kernel-install*" -exec rm {} \;

@@ -3,14 +3,14 @@
 with lib;
 
 let
-
   udev = config.systemd.package;
 
   cfg = config.services.udev;
 
   initrdUdevRules = pkgs.runCommand "initrd-udev-rules" {} ''
     mkdir -p $out/etc/udev/rules.d
-    for f in 60-cdrom_id 60-persistent-storage 75-net-description 80-drivers 80-net-setup-link; do
+    # for f in 60-cdrom_id 60-persistent-storage 75-net-description 80-drivers 80-net-setup-link; do
+    for f in 60-cdrom_id 60-persistent-storage 75-net-description 80-net-setup-link; do
       ln -s ${config.boot.initrd.systemd.package}/lib/udev/rules.d/$f.rules $out/etc/udev/rules.d
     done
   '';
