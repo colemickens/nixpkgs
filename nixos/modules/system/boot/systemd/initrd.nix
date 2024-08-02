@@ -96,7 +96,7 @@ let
   modulesClosure = pkgs.makeModulesClosure {
     rootModules = config.boot.initrd.availableKernelModules ++ config.boot.initrd.kernelModules;
     kernel = config.system.modulesTree;
-    firmware = config.hardware.firmware;
+    firmware = config.boot.initrd.firmware;
     allowMissing = false;
   };
 

@@ -25,7 +25,7 @@ in
     };
 
     boot.kernel.features = mkOption {
-      default = {};
+      default = { };
       example = literalExpression "{ debug = true; }";
       internal = true;
       description = ''
@@ -43,7 +43,7 @@ in
       apply = kernelPackages: kernelPackages.extend (self: super: {
         kernel = super.kernel.override (originalArgs: {
           inherit randstructSeed;
-          kernelPatches = (originalArgs.kernelPatches or []) ++ kernelPatches;
+          kernelPatches = (originalArgs.kernelPatches or [ ]) ++ kernelPatches;
           features = lib.recursiveUpdate super.kernel.features features;
         });
       });
@@ -72,7 +72,7 @@ in
 
     boot.kernelPatches = mkOption {
       type = types.listOf types.attrs;
-      default = [];
+      default = [ ];
       example = literalExpression ''
         [
           {
@@ -169,14 +169,14 @@ in
 
     boot.extraModulePackages = mkOption {
       type = types.listOf types.package;
-      default = [];
+      default = [ ];
       example = literalExpression "[ config.boot.kernelPackages.nvidia_x11 ]";
       description = "A list of additional packages supplying kernel modules.";
     };
 
     boot.kernelModules = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = ''
         The set of kernel modules to be loaded in the second stage of
         the boot process.  Note that modules that are needed to
@@ -188,7 +188,7 @@ in
 
     boot.initrd.availableKernelModules = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [ "sata_nv" "ext3" ];
       description = ''
         The set of kernel modules in the initial ramdisk used during the
@@ -209,7 +209,7 @@ in
 
     boot.initrd.kernelModules = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = "List of modules that are always loaded by the initrd.";
     };
 
@@ -226,20 +226,22 @@ in
     system.modulesTree = mkOption {
       type = types.listOf types.path;
       internal = true;
-      default = [];
+      default = [ ];
       description = ''
         Tree of kernel modules.  This includes the kernel, plus modules
         built outside of the kernel.  Combine these into a single tree of
         symlinks because modprobe only supports one directory.
       '';
       # Convert the list of path to only one path.
-      apply = let
-        kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
-      in modules: (pkgs.aggregateModules modules).override { name = kernel-name + "-modules"; };
+      apply =
+        let
+          kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
+        in
+        modules: (pkgs.aggregateModules modules).override { name = kernel-name + "-modules"; };
     };
 
     system.requiredKernelConfig = mkOption {
-      default = [];
+      default = [ ];
       example = literalExpression ''
         with config.lib.kernelConfig; [
           (isYes "MODULES")
@@ -262,7 +264,8 @@ in
   ###### implementation
 
   config = mkMerge
-    [ (mkIf config.boot.initrd.enable {
+    [
+      (mkIf config.boot.initrd.enable {
         boot.initrd.availableKernelModules =
           optionals config.boot.initrd.includeDefaultModules ([
             # Note: most of these (especially the SATA/PATA modules)
@@ -299,13 +302,21 @@ in
             "xhci_hcd"
             "xhci_pci"
             "usbhid"
-            "hid_generic" "hid_lenovo" "hid_apple" "hid_roccat"
-            "hid_logitech_hidpp" "hid_logitech_dj" "hid_microsoft" "hid_cherry"
+            "hid_generic"
+            "hid_lenovo"
+            "hid_apple"
+            "hid_roccat"
+            "hid_logitech_hidpp"
+            "hid_logitech_dj"
+            "hid_microsoft"
+            "hid_cherry"
             "hid_corsair"
 
           ] ++ optionals pkgs.stdenv.hostPlatform.isx86 [
             # Misc. x86 keyboard stuff.
-            "pcips2" "atkbd" "i8042"
+            "pcips2"
+            "atkbd"
+            "i8042"
 
             # x86 RTC needed by the stage 2 init script.
             "rtc_cmos"
@@ -352,7 +363,7 @@ in
 
             ln -s ${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets $out
 
-            ln -s ${config.hardware.firmware}/lib/firmware $out/firmware
+            ln -s ${config.boot.initrd.firmware}/lib/firmware $out/firmware
           '';
 
         # Implement consoleLogLevel both in early boot and using sysctl
@@ -368,14 +379,17 @@ in
         # Create /etc/modules-load.d/nixos.conf, which is read by
         # systemd-modules-load.service to load required kernel modules.
         environment.etc =
-          { "modules-load.d/nixos.conf".source = kernelModulesConf;
+          {
+            "modules-load.d/nixos.conf".source = kernelModulesConf;
           };
 
         systemd.services.systemd-modules-load =
-          { wantedBy = [ "multi-user.target" ];
+          {
+            wantedBy = [ "multi-user.target" ];
             restartTriggers = [ kernelModulesConf ];
             serviceConfig =
-              { # Ignore failed module loads.  Typically some of the
+              {
+                # Ignore failed module loads.  Typically some of the
                 # modules in ‘boot.kernelModules’ are "nice to have but
                 # not required" (e.g. acpi-cpufreq), so we don't want to
                 # barf on those.
@@ -427,10 +441,12 @@ in
           ] ++ (optional (randstructSeed != "") (isYes "GCC_PLUGIN_RANDSTRUCT"));
 
         # nixpkgs kernels are assumed to have all required features
-        assertions = if config.boot.kernelPackages.kernel ? features then [] else
-          let cfg = config.boot.kernelPackages.kernel.config; in map (attrs:
+        assertions = if config.boot.kernelPackages.kernel ? features then [ ] else
+        let cfg = config.boot.kernelPackages.kernel.config; in map
+          (attrs:
             { assertion = attrs.assertion cfg; inherit (attrs) message; }
-          ) config.system.requiredKernelConfig;
+          )
+          config.system.requiredKernelConfig;
 
       })
 

@@ -17,7 +17,7 @@ let
   modulesClosure = pkgs.makeModulesClosure {
     rootModules = config.boot.initrd.availableKernelModules ++ config.boot.initrd.kernelModules;
     kernel = config.system.modulesTree;
-    firmware = config.hardware.firmware;
+    firmware = config.boot.initrd.firmware;
     allowMissing = false;
   };
 
@@ -452,6 +452,14 @@ in
         You should also use {var}`boot.kernelParams` to specify
         `«resume_offset»`.
       '';
+    };
+
+    boot.initrd.firmware = mkOption {
+      description = ''
+        allows you to override the firmware available to initrd
+      '';
+      default = config.hardware.firmware;
+      defaultText = "value of config.hardware.firmware";
     };
 
     boot.initrd.enable = mkOption {
