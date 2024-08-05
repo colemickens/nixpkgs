@@ -27,6 +27,7 @@
 , rust-cbindgen
 , rustPlatform
 , rustc
+, rustfmt
 , spirv-llvm-translator
 , stdenv
 , udev
@@ -43,7 +44,7 @@
 , galliumDrivers ? [
     "d3d12" # WSL emulated GPU (aka Dozen)
     "iris" # new Intel (Broadwell+)
-    "kmsro" # special "render only" driver for GPUs without a display controller
+    # "kmsro" # special "render only" driver for GPUs without a display controller
     "llvmpipe" # software renderer
     "nouveau" # Nvidia
     "r300" # very old AMD
@@ -279,6 +280,7 @@ in stdenv.mkDerivation {
     jdupes
     glslang
     rustc
+    rustfmt
     rust-bindgen
     rust-cbindgen
     rustPlatform.bindgenHook
@@ -374,6 +376,7 @@ in stdenv.mkDerivation {
   '';
 
   env.NIX_CFLAGS_COMPILE = toString ([
+    "-Wno-unused"
     "-UPIPE_SEARCH_DIR"
     "-DPIPE_SEARCH_DIR=\"${placeholder "opencl"}/lib/gallium-pipe\""
   ]);
