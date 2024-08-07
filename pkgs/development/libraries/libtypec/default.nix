@@ -6,6 +6,7 @@
 , pkg-config
 , libusb1
 , systemd
+, libudev0-shim
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "Rajaram-Regupathy";
     repo = pname;
     rev = "${pname}-${version}";
-    hash = "sha256-lHKaKp2lmoxxxx5hEfhqfPP4pE5jF6eUh1U4zZYZRd4=";
+    hash = "sha256-1AOXvlxyV2YR+A2j6WszbWBiOaYEyQyzni/o6nv8npw=";
   };
 
   nativeBuildInputs = [
@@ -27,6 +28,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libusb1
+    libudev0-shim
     systemd
   ];
 
