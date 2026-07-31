@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  cacert,
   versionCheckHook,
   nix-update-script,
 }:
@@ -18,6 +19,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-p5PHNtqe1sn2FJO7M8G0tSAaXvV4ShEAySWc80JOhJg=";
+
+  # orderbook_l3_returns_error_not_panic requires network access to api.kraken.com
+  checkFlags = [ "--skip=orderbook_l3_returns_error_not_panic" ];
+
+  # reqwest's rustls-platform-verifier needs a CA bundle in the build sandbox
+  nativeCheckInputs = [ cacert ];
+  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
