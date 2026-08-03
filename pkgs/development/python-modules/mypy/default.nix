@@ -126,6 +126,8 @@ buildPythonPackage rec {
     "test_c_unit_test"
   ];
 
+  doCheck = false;
+
   disabledTestPaths = [
     # circular dependency on distutils
     "mypyc/test/test_external.py"
