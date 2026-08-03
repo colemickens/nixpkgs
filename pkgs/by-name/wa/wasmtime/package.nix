@@ -72,7 +72,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     &&
       # The dependency `wasi-preview1-component-adapter` fails to build because of:
       # error: linker `rust-lld` not found
-      !isAarch64;
+      !isAarch64
+    && !isRiscv64;
 
   postInstall =
     let
