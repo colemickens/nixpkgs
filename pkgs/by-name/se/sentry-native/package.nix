@@ -6,6 +6,7 @@
   curl,
   breakpad,
   pkg-config,
+  libunwind,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     curl
     breakpad
+    libunwind
   ];
 
   cmakeBuildType = "RelWithDebInfo";
@@ -34,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DSENTRY_BREAKPAD_SYSTEM=On"
     "-DSENTRY_BACKEND=breakpad"
+    "-DSENTRY_LIBUNWIND_SYSTEM=On"
   ];
 
   meta = {
