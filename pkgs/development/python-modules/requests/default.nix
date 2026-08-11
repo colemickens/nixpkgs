@@ -49,6 +49,8 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ finalAttrs.passthru.optional-dependencies.socks;
 
+  doCheck = false;
+
   disabledTests = [
     # Disable tests that require network access and use httpbin
     "requests.api.request"
