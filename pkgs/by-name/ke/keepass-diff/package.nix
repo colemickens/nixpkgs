@@ -1,19 +1,23 @@
 {
   lib,
-  fetchCrate,
+  fetchFromGitHub,
   rustPlatform,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "keepass-diff";
-  version = "1.2.0";
+  version = "1.2.0-unstable-2026-04-25";
 
-  src = fetchCrate {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-CqLH5Dosp26YfqgOVcZilfo5svAEv+pAbi1zebGMnb4=";
+  # https://github.com/Narigo/keepass-diff/pull/85 (bump keepass to 0.12.0),
+  # a single commit on top of upstream main
+  src = fetchFromGitHub {
+    owner = "Narigo";
+    repo = "keepass-diff";
+    rev = "71bb3d31508d4d6b4caa9d155a14dff383402c28";
+    hash = "sha256-jWVEax+DK5dZJsPjCMgYn0C1DFCrZ5ZrMV3/th/vF74=";
   };
 
-  cargoHash = "sha256-QjcXeLLIvegzETIu3xbZQ+o2WYxR6xkALVOOWYWhGUo=";
+  cargoHash = "sha256-r/CiKHds6GGAg4TzdjhEDOK0CtzEFxFDgSpAB02GYds=";
 
   meta = {
     description = "CLI-tool to diff Keepass (.kdbx) files";
